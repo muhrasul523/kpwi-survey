@@ -31,29 +31,24 @@
     <style>
         body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #ffffff 100%); min-height: 100vh; color: #1e293b; }
         .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 40px rgba(30, 58, 138, 0.08); }
-        .fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .fade-in { animation: fadeIn 0.4s ease-out forwards; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
         .ts-control { border-radius: 0.75rem; padding: 0.875rem 1.25rem; border: 1px solid #cbd5e1; background-color: #f8fafc; }
         .ts-control.focus { border-color: #1e3a8a; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15); background-color: #ffffff; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-        
-        /* Mempertahankan multiline dari sheet */
         .keep-multiline { white-space: pre-wrap; line-height: 1.5; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-gold selection:text-brand-blue">
 
-    <!-- LOADING OVERLAY (Progress Smooth) -->
-    <div id="loadingOverlay" class="fixed inset-0 bg-brand-blue z-[9999] flex flex-col items-center justify-center text-white transition-opacity duration-[800ms]">
+    <!-- LOADING OVERLAY (Fast & Smooth) -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-brand-blue z-[9999] flex flex-col items-center justify-center text-white transition-all duration-300">
         <img src="Wahdah Islamiyah.png" alt="Logo Wahdah" class="h-28 mb-8 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] animate-pulse" onerror="this.src='https://via.placeholder.com/150x150?text=Logo'">
-        
         <div class="w-72 max-w-[80vw] h-2.5 bg-blue-900 rounded-full overflow-hidden shadow-inner border border-blue-800">
-            <!-- Transisi linear agar baris loading berjalan rata -->
-            <div id="progressBar" class="h-full bg-gradient-to-r from-brand-gold to-yellow-300 w-0 transition-[width] duration-300 ease-linear shadow-[0_0_10px_rgba(234,179,8,0.8)]"></div>
+            <div id="progressBar" class="h-full bg-gradient-to-r from-brand-gold to-yellow-300 w-0 transition-[width] duration-[150ms] ease-linear shadow-[0_0_10px_rgba(234,179,8,0.8)]"></div>
         </div>
-        <p id="progressPercent" class="mt-3 text-sm font-medium text-blue-200 w-full text-center">0%</p>
     </div>
 
     <!-- MAIN APP -->
@@ -68,13 +63,20 @@
         <div id="viewForm" class="max-w-3xl mx-auto glass-panel rounded-3xl p-6 md:p-10 fade-in border-t-4 border-t-brand-gold">
             <form id="surveyForm" onsubmit="submitForm(event)">
                 
-                <!-- STEP 1: Nomor WA Diatas -->
-                <div class="mb-6">
-                    <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-brands fa-whatsapp text-green-500 text-lg mr-2"></i> Nomor WhatsApp <span class="text-red-500">*</span></label>
-                    <input type="text" id="waInput" required class="w-full rounded-xl border-gray-300 border bg-white px-4 py-3.5 focus:ring-4 focus:ring-blue-100 outline-none text-gray-700 font-medium" placeholder="Contoh: 628123456789" oninput="validateWA(this)">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <!-- WhatsApp -->
+                    <div>
+                        <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-brands fa-whatsapp text-green-500 text-lg mr-2"></i> Nomor WhatsApp <span class="text-red-500">*</span></label>
+                        <input type="text" id="waInput" required class="w-full rounded-xl border-gray-300 border bg-white px-4 py-3.5 focus:ring-4 focus:ring-blue-100 outline-none text-gray-700 font-medium" placeholder="Contoh: 628123456789" oninput="validateWA(this)">
+                    </div>
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-solid fa-envelope text-blue-500 text-lg mr-2"></i> Alamat Email <span class="text-red-500">*</span></label>
+                        <input type="email" id="emailInput" required class="w-full rounded-xl border-gray-300 border bg-white px-4 py-3.5 focus:ring-4 focus:ring-blue-100 outline-none text-gray-700 font-medium" placeholder="email@contoh.com">
+                    </div>
                 </div>
 
-                <!-- STEP 2: Pilih Nama -->
+                <!-- Pilih Nama -->
                 <div class="mb-6">
                     <label class="block text-sm font-bold text-brand-blue mb-3">
                         <i class="fa-solid fa-user-tie text-brand-gold mr-2 text-lg"></i> Nama Pegawai <span class="text-red-500">*</span>
@@ -84,10 +86,9 @@
                     </select>
                 </div>
 
-                <!-- STEP 3: Detail Form (Muncul otomatis setelah pilih nama) -->
+                <!-- Detail Form (Muncul otomatis setelah pilih nama) -->
                 <div id="formDetails" class="hidden space-y-6 mt-8 pt-6 border-t border-gray-200 fade-in">
                     
-                    <!-- Alert Riwayat -->
                     <div id="alertAutofill" class="hidden bg-blue-50 border-l-4 border-brand-blue p-4 rounded-r-lg">
                         <div class="flex items-center">
                             <i class="fa-solid fa-clock-rotate-left text-brand-blue mr-3 text-lg"></i>
@@ -95,7 +96,7 @@
                         </div>
                     </div>
 
-                    <!-- Read-Only: Bidang Kerja & Amanah (Grid 2 Kolom di Desktop) -->
+                    <!-- Bidang Kerja & Amanah (Grid 2 Kolom) -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-solid fa-layer-group text-brand-gold mr-2"></i> Bidang Kerja</label>
@@ -109,7 +110,7 @@
                         </div>
                     </div>
 
-                    <!-- Input Rencana Aktivitas -->
+                    <!-- Input Rencana -->
                     <div>
                         <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-solid fa-clipboard-list text-brand-gold text-lg mr-2"></i> Rencana Kegiatan <span class="text-red-500">*</span></label>
                         <textarea id="activityInput" rows="5" required class="w-full rounded-xl border-gray-300 border bg-white px-4 py-3.5 focus:ring-4 focus:ring-blue-100 outline-none resize-none text-gray-700 font-medium" placeholder="Tuliskan detail rencana kegiatan Anda..."></textarea>
@@ -128,7 +129,7 @@
                 <i class="fa-solid fa-check text-5xl text-green-500"></i>
             </div>
             <h2 class="text-3xl font-extrabold text-brand-blue mb-4">Alhamdulillah!</h2>
-            <p class="text-gray-600 text-lg mb-8">Rencana kegiatan Anda berhasil disimpan. Terima kasih atas partisipasi Anda.</p>
+            <p class="text-gray-600 text-lg mb-8">Laporan kegiatan Anda telah diterima dan salinan telah dikirimkan ke WhatsApp & Email Anda.</p>
             <button onclick="resetForm()" class="bg-gray-100 hover:bg-gray-200 text-brand-blue font-bold py-3 px-8 rounded-full border border-gray-300">
                 <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Beranda
             </button>
@@ -164,9 +165,7 @@
             <!-- METRIK BIDANG KERJA -->
             <div class="glass-panel p-6 rounded-2xl">
                 <h3 class="font-bold text-brand-blue mb-4 border-b pb-2"><i class="fa-solid fa-layer-group text-brand-gold mr-2"></i> Rekapitulasi per Bidang Kerja</h3>
-                <div id="bidangStatsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <!-- Cards Bidang Kerja dimuat via JS -->
-                </div>
+                <div id="bidangStatsGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
             </div>
 
             <!-- Datatable -->
@@ -175,12 +174,10 @@
                     <h3 class="font-bold text-brand-blue text-lg">Tabel Data</h3>
                     
                     <div class="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
-                        <!-- Filter Bidang -->
                         <select id="filterBidang" onchange="filterTable()" class="px-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-blue outline-none text-sm bg-white">
                             <option value="">Semua Bidang Kerja</option>
                         </select>
                         
-                        <!-- Search Box -->
                         <div class="relative w-full sm:w-64">
                             <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Cari teks bebas..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-blue outline-none text-sm bg-white">
                             <i class="fa-solid fa-search absolute left-3.5 top-3 text-gray-400"></i>
@@ -192,11 +189,11 @@
                     <table class="w-full text-left text-sm" id="dataTable">
                         <thead class="bg-brand-blue text-white sticky top-0 z-10">
                             <tr>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(0)">Waktu Update <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(1)">Nama Pegawai <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(2)">No WA <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(3)">Bidang Kerja <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(4)">Amanah <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
+                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(0)">Waktu Update <i class="fa-solid fa-sort"></i></th>
+                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(1)">Nama Pegawai <i class="fa-solid fa-sort"></i></th>
+                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(2)">Kontak <i class="fa-solid fa-sort"></i></th>
+                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(3)">Bidang Kerja <i class="fa-solid fa-sort"></i></th>
+                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(4)">Amanah <i class="fa-solid fa-sort"></i></th>
                                 <th class="px-5 py-4 font-semibold min-w-[300px]">Rencana Aktivitas</th>
                             </tr>
                         </thead>
@@ -207,7 +204,6 @@
         </div>
     </div>
 
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         const API_URL = 'https://script.google.com/macros/s/AKfycbwi5E9mJl9gvC5ZsTaK59c109AgT4e7P65UOkSx4P8HyQTRuvA030I_UtFRZ2Ir-RFv/exec';
         
@@ -215,7 +211,6 @@
         let tomSelectInstance = null;
         const ADMIN_PASS = "kpwi";
 
-        // Fungsi Fetch Anti Gagal (Auto-Retry)
         async function fetchWithRetry(url, payload, retries = 3) {
             for (let i = 0; i < retries; i++) {
                 try {
@@ -225,7 +220,7 @@
                     throw new Error(data.message);
                 } catch (err) {
                     if (i === retries - 1) throw err;
-                    await new Promise(res => setTimeout(res, 1000)); // Tunggu 1 detik lalu ulangi
+                    await new Promise(res => setTimeout(res, 1000));
                 }
             }
         }
@@ -233,38 +228,30 @@
         document.addEventListener("DOMContentLoaded", () => {
             let progress = 0;
             const bar = document.getElementById('progressBar');
-            const percentTxt = document.getElementById('progressPercent');
             
-            // Logika Progress Bar Halus 0-99%
+            // Animasi loading super cepat (1.5 detik max ke 95%)
             const interval = setInterval(() => {
-                let increment = progress < 50 ? 2 : (progress < 80 ? 1 : 0.5);
-                progress += increment;
-                if(progress > 99) progress = 99; // Tahan di 99% sampai data selesai
-                
+                progress += Math.floor(Math.random() * 10) + 5;
+                if(progress > 95) progress = 95;
                 bar.style.width = progress + '%';
-                percentTxt.innerText = Math.floor(progress) + '%';
-            }, 50);
+            }, 100);
 
-            // Fetch Data 
+            // Fetch Data
             fetchWithRetry(API_URL, { action: 'getData' })
             .then(data => {
                 clearInterval(interval);
                 globalData = data;
                 
-                // Langsung penuh & hilang
                 bar.style.width = '100%'; 
-                percentTxt.innerText = '100%';
-                
                 setTimeout(() => {
                     const overlay = document.getElementById('loadingOverlay');
                     overlay.style.opacity = '0';
-                    setTimeout(() => { overlay.style.display = 'none'; document.getElementById('mainApp').classList.remove('hidden'); initApp(); }, 500);
-                }, 300);
+                    setTimeout(() => { overlay.style.display = 'none'; document.getElementById('mainApp').classList.remove('hidden'); initApp(); }, 300);
+                }, 200);
             })
             .catch(err => {
                 clearInterval(interval);
-                percentTxt.innerText = 'Gagal Memuat';
-                Swal.fire('Koneksi Lemah', 'Gagal memuat data setelah beberapa percobaan. Pastikan internet Anda stabil dan muat ulang halaman.', 'error');
+                Swal.fire('Koneksi Lemah', 'Gagal memuat data. Pastikan internet Anda stabil lalu muat ulang halaman.', 'error');
             });
         });
 
@@ -303,21 +290,21 @@
             formDetails.classList.remove('hidden');
             const employee = globalData.employees.find(e => e.name === selectedName);
             
-            // Parse & Set Amanah dan Bidang Kerja sesuai Sheet (Multiline dipertahankan)
             let amanahRaw = employee && employee.amanah ? employee.amanah : "-";
             let bidangRaw = employee && employee.bidang ? employee.bidang : "-";
             
             disAmanah.textContent = amanahRaw; hidAmanah.value = amanahRaw;
             disBidang.textContent = bidangRaw; hidBidang.value = bidangRaw;
 
-            // Cek Riwayat untuk isi Textarea Rencana (WA tidak ditimpa jika sudah diisi)
             const historyData = globalData.updates.find(u => u.name === selectedName);
             if (historyData) {
                 actInput.value = historyData.activity;
                 alertBox.classList.remove('hidden');
-                // Optional: Autocomplete WA jika user belum ngisi
+                
                 const waInput = document.getElementById('waInput');
+                const emInput = document.getElementById('emailInput');
                 if(!waInput.value) waInput.value = historyData.wa;
+                if(!emInput.value) emInput.value = historyData.email || '';
             } else {
                 actInput.value = ''; alertBox.classList.add('hidden');
             }
@@ -332,6 +319,7 @@
                 action: 'submitData',
                 name: document.getElementById('pegawaiSelect').value,
                 wa: wa,
+                email: document.getElementById('emailInput').value,
                 bidang: document.getElementById('bidangHidden').value,
                 amanah: document.getElementById('amanahHidden').value,
                 activity: document.getElementById('activityInput').value
@@ -339,7 +327,7 @@
 
             const btn = document.getElementById('btnSubmit');
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Memproses...';
             btn.disabled = true;
 
             fetchWithRetry(API_URL, payload)
@@ -353,7 +341,7 @@
                 else globalData.updates.unshift(payload);
                 renderAdminData();
             })
-            .catch(err => Swal.fire('Error Menyimpan', err.toString(), 'error'))
+            .catch(err => Swal.fire('Error', err.toString(), 'error'))
             .finally(() => { btn.innerHTML = originalText; btn.disabled = false; });
         }
 
@@ -383,21 +371,14 @@
             else document.getElementById('viewForm').classList.remove('hidden');
         }
 
-        // =====================================
-        // LOGIKA DASHBOARD & METRIK
-        // =====================================
         function renderAdminData() {
-            // 1. Hitung Metrik Utama
             const totalPegawai = globalData.employees.length;
             const mengisi = globalData.updates.length;
             document.getElementById('statPegawai').innerText = totalPegawai;
             document.getElementById('statMengisi').innerText = mengisi;
             document.getElementById('statBelum').innerText = totalPegawai - mengisi;
 
-            // 2. Kalkulasi Metrik Bidang Kerja Dinamis
             let bidangStats = {};
-            
-            // Hitung total orang di setiap bidang dari master pegawai
             globalData.employees.forEach(emp => {
                 let bidangs = emp.bidang ? emp.bidang.split('\n').map(b => b.trim()).filter(b=>b) : ["Tanpa Bidang"];
                 if(bidangs.length === 0) bidangs = ["Tanpa Bidang"];
@@ -407,41 +388,31 @@
                 });
             });
 
-            // Hitung siapa yang sudah mengisi di tiap bidang
             globalData.updates.forEach(upd => {
                 let bidangs = upd.bidang ? upd.bidang.split('\n').map(b => b.trim()).filter(b=>b) : ["Tanpa Bidang"];
                 if(bidangs.length === 0) bidangs = ["Tanpa Bidang"];
-                bidangs.forEach(b => {
-                    if(bidangStats[b]) bidangStats[b].filled++;
-                });
+                bidangs.forEach(b => { if(bidangStats[b]) bidangStats[b].filled++; });
             });
 
-            // 3. Render Cards Bidang & Isi Select Filter
             const grid = document.getElementById('bidangStatsGrid');
             const filterSelect = document.getElementById('filterBidang');
             grid.innerHTML = ''; 
-            
-            // Reset option filter kecuali default
             while (filterSelect.options.length > 1) { filterSelect.remove(1); }
 
             Object.keys(bidangStats).sort().forEach(bName => {
                 const stat = bidangStats[bName];
                 const percent = Math.round((stat.filled / stat.total) * 100) || 0;
-                
                 grid.innerHTML += `
                     <div class="bg-gray-50 border border-gray-100 p-3 rounded-lg shadow-sm">
                         <div class="text-xs font-bold text-gray-500 mb-1 truncate" title="${bName}">${bName}</div>
                         <div class="flex justify-between items-end">
-                            <div class="text-lg font-black text-brand-blue">${stat.filled}<span class="text-xs text-gray-400 font-normal">/${stat.total} org</span></div>
+                            <div class="text-lg font-black text-brand-blue">${stat.filled}<span class="text-xs text-gray-400 font-normal">/${stat.total}</span></div>
                             <div class="text-xs ${percent === 100 ? 'text-green-600' : 'text-brand-gold'} font-bold">${percent}%</div>
                         </div>
-                    </div>
-                `;
-                
+                    </div>`;
                 filterSelect.options.add(new Option(bName, bName));
             });
 
-            // 4. Render Tabel Data (Amanah & Bidang Tampil Sesuai Baris)
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
             globalData.updates.forEach(sub => {
@@ -449,10 +420,9 @@
                     <tr class="hover:bg-blue-50/50">
                         <td class="px-5 py-3 text-gray-600 text-xs">${sub.timestamp}</td>
                         <td class="px-5 py-3 font-semibold text-brand-blue">${sub.name}</td>
-                        <td class="px-5 py-3">
-                            <a href="https://wa.me/${sub.wa}" target="_blank" class="flex items-center gap-2 text-green-600 hover:text-green-800 bg-green-50 px-3 py-1.5 rounded-full w-max text-sm font-medium transition">
-                                <i class="fa-brands fa-whatsapp text-lg"></i> ${sub.wa}
-                            </a>
+                        <td class="px-5 py-3 space-y-1">
+                            <a href="https://wa.me/${sub.wa}" target="_blank" class="flex items-center gap-2 text-green-600 bg-green-50 px-2 py-1 rounded w-max text-xs font-medium"><i class="fa-brands fa-whatsapp"></i> ${sub.wa}</a>
+                            <div class="flex items-center gap-2 text-blue-600 bg-blue-50 px-2 py-1 rounded w-max text-xs font-medium"><i class="fa-solid fa-envelope"></i> ${sub.email || '-'}</div>
                         </td>
                         <td class="px-5 py-3 text-gray-700 text-xs keep-multiline" data-bidang="${sub.bidang}">${sub.bidang}</td>
                         <td class="px-5 py-3 text-gray-700 text-xs keep-multiline">${sub.amanah}</td>
@@ -462,9 +432,6 @@
             });
         }
 
-        // =====================================
-        // FILTER & SORTING
-        // =====================================
         function filterTable() {
             const textFilter = document.getElementById("searchInput").value.toLowerCase();
             const bidangFilter = document.getElementById("filterBidang").value.toLowerCase();
@@ -473,10 +440,8 @@
             for (let i = 0; i < rows.length; i++) {
                 const textContent = rows[i].textContent.toLowerCase();
                 const cellBidang = rows[i].querySelector('[data-bidang]').getAttribute('data-bidang').toLowerCase();
-                
                 const matchesText = textContent.includes(textFilter);
                 const matchesBidang = bidangFilter === "" || cellBidang.includes(bidangFilter);
-                
                 rows[i].style.display = (matchesText && matchesBidang) ? "" : "none";
             }
         }
@@ -486,7 +451,6 @@
             const table = document.getElementById("dataTable");
             let rows, switching, i, x, y, shouldSwitch;
             switching = true; sortAsc = !sortAsc;
-            
             while (switching) {
                 switching = false; rows = table.rows;
                 for (i = 1; i < (rows.length - 1); i++) {
@@ -515,11 +479,11 @@
         function exportToPDF() {
             if(globalData.updates.length === 0) return;
             const doc = new jspdf.jsPDF('l', 'pt', 'a4');
-            doc.text("Rekapitulasi Survey Kegiatan", 40, 40);
+            doc.text("Rekapitulasi Survey", 40, 40);
             doc.autoTable({
-                head: [['Waktu', 'Nama', 'No WA', 'Bidang Kerja', 'Amanah', 'Rencana Aktivitas']],
-                body: globalData.updates.map(s => [s.timestamp, s.name, s.wa, s.bidang, s.amanah, s.activity]),
-                startY: 60, styles: { fontSize: 8 }, headStyles: { fillColor: [30, 58, 138] }, columnStyles: { 5: { cellWidth: 200 } }
+                head: [['Waktu', 'Nama', 'WA', 'Email', 'Bidang', 'Amanah', 'Rencana']],
+                body: globalData.updates.map(s => [s.timestamp, s.name, s.wa, s.email, s.bidang, s.amanah, s.activity]),
+                startY: 60, styles: { fontSize: 7 }, headStyles: { fillColor: [30, 58, 138] }, columnStyles: { 6: { cellWidth: 150 } }
             });
             doc.save(`Rekap_Survey.pdf`);
         }
