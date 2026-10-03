@@ -13,36 +13,22 @@
                 extend: {
                     colors: {
                         brand: {
-                            blue: '#1e3a8a',      /* Biru Gelap Eksklusif */
-                            bluelight: '#2563eb', /* Biru Terang */
-                            gold: '#eab308',      /* Kuning Emas */
-                            goldlight: '#fde047',
-                            white: '#ffffff',
-                            bg: '#f0f9ff'         /* Gradien Biru Sangat Pudar */
+                            blue: '#1e3a8a', 
+                            gold: '#eab308'
                         }
                     },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
+                    fontFamily: { sans: ['Inter', 'sans-serif'] }
                 }
             }
         }
     </script>
     
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts, FontAwesome, SweetAlert, TomSelect, Export Libs -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
-    <!-- TomSelect (Searchable Dropdown) -->
     <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
-    
-    <!-- SheetJS & jsPDF (Export Admin) -->
     <script src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
@@ -51,197 +37,113 @@
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 50%, #ffffff 100%);
-            min-height: 100vh;
-            color: #1e293b;
+            min-height: 100vh; color: #1e293b;
         }
-        
-        /* Premium Glassmorphism */
         .glass-panel {
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.6);
             box-shadow: 0 10px 40px rgba(30, 58, 138, 0.08);
         }
-
         .fade-in { animation: fadeIn 0.5s ease-out forwards; }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* TomSelect Premium Overrides */
-        .ts-control { 
-            border-radius: 0.75rem; 
-            padding: 0.875rem 1.25rem; 
-            border: 1px solid #cbd5e1; 
-            font-size: 0.95rem;
-            background-color: #f8fafc;
-        }
-        .ts-control.focus { 
-            border-color: #1e3a8a; 
-            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15); 
-            background-color: #ffffff;
-        }
-
-        /* Custom Scrollbar */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .ts-control { border-radius: 0.75rem; padding: 0.875rem 1.25rem; border: 1px solid #cbd5e1; background-color: #f8fafc; }
+        .ts-control.focus { border-color: #1e3a8a; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.15); background-color: #ffffff; }
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #94a3b8; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #1e3a8a; }
     </style>
 </head>
 <body class="antialiased selection:bg-brand-gold selection:text-brand-blue">
 
-    <!-- ========================================== -->
-    <!-- 1. PROGRESS BAR LOADING OVERLAY -->
-    <!-- ========================================== -->
+    <!-- LOADING OVERLAY -->
     <div id="loadingOverlay" class="fixed inset-0 bg-brand-blue z-[9999] flex flex-col items-center justify-center text-white transition-opacity duration-500">
-        <!-- Menggunakan URL logo dari instruksi -->
-        <img src="https://drive.google.com/uc?export=view&id=1632HEuR07N9zdPFr_s9a52uLUDbdLOnY" alt="Logo" class="h-28 mb-8 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] animate-pulse">
-        <h2 class="text-xl font-semibold mb-6 tracking-wide" id="loadingText">Memuat Sistem...</h2>
+        <!-- Logo diperbaiki menggunakan gambar lokal -->
+        <img src="Wahdah Islamiyah.png" alt="Logo Wahdah" class="h-28 mb-8 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] animate-pulse" onerror="this.src='https://via.placeholder.com/150x150?text=Logo'">
         
+        <h2 class="text-xl font-semibold mb-6 tracking-wide" id="loadingText">Memuat Sistem...</h2>
         <div class="w-72 max-w-[80vw] h-2.5 bg-blue-900 rounded-full overflow-hidden shadow-inner border border-blue-800">
-            <div id="progressBar" class="h-full bg-gradient-to-r from-brand-gold to-yellow-300 w-0 transition-all duration-300 ease-out shadow-[0_0_10px_rgba(234,179,8,0.8)]"></div>
+            <div id="progressBar" class="h-full bg-gradient-to-r from-brand-gold to-yellow-300 w-0 transition-all duration-300 shadow-[0_0_10px_rgba(234,179,8,0.8)]"></div>
         </div>
         <p id="progressPercent" class="mt-3 text-sm font-medium text-blue-200">0%</p>
     </div>
 
-    <!-- MAIN CONTAINER -->
+    <!-- MAIN APP -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 hidden" id="mainApp">
         
-        <!-- HEADER FORM -->
         <div class="text-center mb-8 fade-in">
-            <img 
-                src="https://drive.google.com/uc?export=view&id=1632HEuR07N9zdPFr_s9a52uLUDbdLOnY" 
-                alt="Wahdah Islamiyah" 
-                class="h-24 mx-auto mb-5 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl"
-                onclick="promptAdminLogin()"
-            >
-            <h1 class="text-2xl md:text-3xl font-extrabold text-brand-blue tracking-tight">
-                Survey Kegiatan Pegawai
-            </h1>
+            <!-- Logo diperbaiki menggunakan gambar lokal -->
+            <img src="Wahdah Islamiyah.png" alt="Logo Wahdah" class="h-24 mx-auto mb-5 cursor-pointer hover:scale-105 transition-transform duration-300 drop-shadow-xl" onclick="promptAdminLogin()" onerror="this.style.display='none'">
+            <h1 class="text-2xl md:text-3xl font-extrabold text-brand-blue tracking-tight">Survey Kegiatan Pegawai</h1>
             <p class="text-gray-500 mt-2 text-sm md:text-base font-medium">Kantor Pusat Wahdah Islamiyah</p>
         </div>
 
-        <!-- ========================================== -->
-        <!-- VIEW 1: FORM INPUT -->
-        <!-- ========================================== -->
+        <!-- VIEW FORM -->
         <div id="viewForm" class="max-w-3xl mx-auto glass-panel rounded-3xl p-6 md:p-10 fade-in border-t-4 border-t-brand-gold">
             <form id="surveyForm" onsubmit="submitForm(event)">
-                
-                <!-- STEP 1: Pilih Nama -->
                 <div class="mb-6">
-                    <label for="pegawaiSelect" class="block text-sm font-bold text-brand-blue mb-3">
+                    <label class="block text-sm font-bold text-brand-blue mb-3">
                         <i class="fa-solid fa-user-tie text-brand-gold mr-2 text-lg"></i> Nama Pegawai <span class="text-red-500">*</span>
                     </label>
-                    <select id="pegawaiSelect" name="pegawaiId" placeholder="Ketik untuk mencari nama Anda..." required>
+                    <select id="pegawaiSelect" required>
                         <option value="">Ketik untuk mencari nama Anda...</option>
-                        <!-- Options diisi JS -->
                     </select>
                 </div>
 
-                <!-- STEP 2: Detail Form (Hidden Awalnya) -->
                 <div id="formDetails" class="hidden space-y-6 mt-8 pt-6 border-t border-gray-200 fade-in">
-                    
-                    <!-- Alert Update (Muncul jika ada riwayat) -->
                     <div id="alertAutofill" class="hidden bg-blue-50 border-l-4 border-brand-blue p-4 rounded-r-lg">
                         <div class="flex items-center">
                             <i class="fa-solid fa-clock-rotate-left text-brand-blue mr-3 text-lg"></i>
-                            <p class="text-sm text-brand-blue font-medium">Sistem memuat riwayat rencana Anda sebelumnya. Silakan edit atau perbarui data di bawah ini.</p>
+                            <p class="text-sm text-brand-blue font-medium">Sistem memuat riwayat rencana Anda sebelumnya.</p>
                         </div>
                     </div>
 
-                    <!-- Read-Only: Amanah -->
                     <div>
-                        <label class="block text-sm font-bold text-brand-blue mb-2">
-                            <i class="fa-solid fa-briefcase text-brand-gold mr-2"></i> Amanah / Jabatan
-                        </label>
-                        <div class="bg-gray-50/80 border border-gray-200 rounded-xl p-5 text-sm text-gray-700 shadow-inner">
-                            <ol id="amanahList" class="list-decimal list-inside space-y-2 font-medium">
-                                <!-- List amanah -->
-                            </ol>
+                        <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-solid fa-briefcase text-brand-gold mr-2"></i> Amanah / Jabatan</label>
+                        <div class="bg-gray-50/80 border border-gray-200 rounded-xl p-5 text-sm text-gray-700">
+                            <ol id="amanahList" class="list-decimal list-inside space-y-2 font-medium"></ol>
                         </div>
-                        <input type="hidden" id="amanahHidden" name="amanah">
+                        <input type="hidden" id="amanahHidden">
                     </div>
 
-                    <!-- Input WhatsApp -->
                     <div>
-                        <label for="waInput" class="block text-sm font-bold text-brand-blue mb-2">
-                            <i class="fa-brands fa-whatsapp text-green-500 text-lg mr-2"></i> No. WhatsApp <span class="text-red-500">*</span>
-                        </label>
-                        <div class="relative">
-                            <input type="text" id="waInput" name="wa" required
-                                class="w-full rounded-xl border-gray-300 border bg-white px-4 py-3.5 focus:ring-4 focus:ring-blue-100 focus:border-brand-blue transition-all outline-none text-gray-700 font-medium"
-                                placeholder="Contoh: 628123456789"
-                                oninput="validateWA(this)">
-                        </div>
+                        <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-brands fa-whatsapp text-green-500 text-lg mr-2"></i> No. WhatsApp <span class="text-red-500">*</span></label>
+                        <input type="text" id="waInput" required class="w-full rounded-xl border-gray-300 border px-4 py-3.5 focus:ring-4 focus:ring-blue-100 outline-none" placeholder="Contoh: 628123456789" oninput="validateWA(this)">
                     </div>
 
-                    <!-- Input Rencana Aktivitas -->
                     <div>
-                        <label for="activityInput" class="block text-sm font-bold text-brand-blue mb-2">
-                            <i class="fa-solid fa-clipboard-list text-brand-gold text-lg mr-2"></i> Rencana Aktivitas <span class="text-red-500">*</span>
-                        </label>
-                        <textarea id="activityInput" name="activity" rows="5" required
-                            class="w-full rounded-xl border-gray-300 border bg-white px-4 py-3.5 focus:ring-4 focus:ring-blue-100 focus:border-brand-blue transition-all outline-none resize-none text-gray-700 font-medium"
-                            placeholder="Tuliskan detail rencana kegiatan Anda di sini..."></textarea>
+                        <label class="block text-sm font-bold text-brand-blue mb-2"><i class="fa-solid fa-clipboard-list text-brand-gold text-lg mr-2"></i> Rencana Aktivitas <span class="text-red-500">*</span></label>
+                        <textarea id="activityInput" rows="5" required class="w-full rounded-xl border-gray-300 border px-4 py-3.5 focus:ring-4 focus:ring-blue-100 outline-none resize-none" placeholder="Tuliskan detail rencana kegiatan Anda..."></textarea>
                     </div>
 
-                    <!-- Tombol Submit -->
-                    <button type="submit" id="btnSubmit" 
-                        class="w-full mt-4 bg-gradient-to-r from-brand-blue to-blue-700 hover:from-blue-700 hover:to-blue-900 text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:shadow-2xl hover:-translate-y-1 transition-all duration-300 flex justify-center items-center gap-3 text-lg">
+                    <button type="submit" id="btnSubmit" class="w-full mt-4 bg-gradient-to-r from-brand-blue to-blue-700 hover:from-blue-700 hover:to-blue-900 text-white font-bold py-4 px-6 rounded-xl shadow-lg transition-all flex justify-center items-center gap-3 text-lg">
                         <i class="fa-solid fa-paper-plane"></i> Kirim Rencana Kegiatan
                     </button>
                 </div>
             </form>
         </div>
 
-        <!-- ========================================== -->
-        <!-- VIEW 2: SUCCESS PAGE -->
-        <!-- ========================================== -->
+        <!-- VIEW SUCCESS -->
         <div id="viewSuccess" class="max-w-2xl mx-auto glass-panel rounded-3xl p-10 text-center hidden fade-in border-t-4 border-t-green-500">
             <div class="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <i class="fa-solid fa-check text-5xl text-green-500"></i>
             </div>
             <h2 class="text-3xl font-extrabold text-brand-blue mb-4">Alhamdulillah!</h2>
-            <p class="text-gray-600 text-lg mb-8 leading-relaxed">Rencana kegiatan Anda berhasil disimpan ke dalam sistem pendataan Kantor Pusat Wahdah Islamiyah. Terima kasih atas partisipasi Anda.</p>
-            <button onclick="resetForm()" class="bg-gray-100 hover:bg-gray-200 text-brand-blue font-bold py-3 px-8 rounded-full transition-colors border border-gray-300">
+            <p class="text-gray-600 text-lg mb-8">Rencana kegiatan Anda berhasil disimpan. Terima kasih atas partisipasi Anda.</p>
+            <button onclick="resetForm()" class="bg-gray-100 hover:bg-gray-200 text-brand-blue font-bold py-3 px-8 rounded-full border border-gray-300">
                 <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Beranda
             </button>
         </div>
 
-        <!-- ========================================== -->
-        <!-- VIEW 3: ADMIN DASHBOARD (HIDDEN) -->
-        <!-- ========================================== -->
+        <!-- VIEW ADMIN -->
         <div id="viewAdmin" class="hidden fade-in space-y-6">
-            
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 bg-brand-blue text-white p-6 rounded-2xl shadow-lg">
-                <h2 class="text-2xl font-bold flex items-center gap-3">
-                    <i class="fa-solid fa-chart-pie text-brand-gold"></i> Dasbor Rekapitulasi Data
-                </h2>
+                <h2 class="text-2xl font-bold flex items-center gap-3"><i class="fa-solid fa-chart-pie text-brand-gold"></i> Dasbor Rekapitulasi</h2>
                 <div class="flex gap-3">
-                    <button onclick="exportToExcel()" class="bg-green-600 hover:bg-green-700 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
-                        <i class="fa-solid fa-file-excel"></i> Unduh Excel
-                    </button>
-                    <button onclick="exportToPDF()" class="bg-red-600 hover:bg-red-700 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2">
-                        <i class="fa-solid fa-file-pdf"></i> Unduh PDF
-                    </button>
-                    <button onclick="switchView('form')" class="bg-white/20 hover:bg-white/30 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors">
-                        Tutup
-                    </button>
-                </div>
-            </div>
-
-            <!-- AI Summary Section -->
-            <div class="glass-panel rounded-2xl p-6 relative overflow-hidden group border-l-4 border-brand-gold">
-                <div class="absolute top-0 right-0 p-4 opacity-5 text-6xl text-brand-blue"><i class="fa-solid fa-robot"></i></div>
-                <h3 class="text-lg font-bold text-brand-blue mb-3 flex items-center gap-2">
-                    <i class="fa-solid fa-wand-magic-sparkles text-brand-gold"></i> AI Auto-Summary
-                </h3>
-                <div class="bg-white/60 p-4 rounded-xl border border-gray-100 text-sm text-gray-700">
-                    <p class="mb-3 font-medium text-gray-500">Intisari aktivitas pegawai (Data Update Terakhir):</p>
-                    <ul id="aiSummaryList" class="space-y-2 list-disc list-inside"></ul>
+                    <button onclick="exportToExcel()" class="bg-green-600 hover:bg-green-700 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2"><i class="fa-solid fa-file-excel"></i> Excel</button>
+                    <button onclick="exportToPDF()" class="bg-red-600 hover:bg-red-700 px-4 py-2.5 rounded-lg text-sm font-semibold transition-colors flex items-center gap-2"><i class="fa-solid fa-file-pdf"></i> PDF</button>
+                    <button onclick="switchView('form')" class="bg-white/20 hover:bg-white/30 px-4 py-2.5 rounded-lg text-sm font-semibold">Tutup</button>
                 </div>
             </div>
 
@@ -250,51 +152,41 @@
                 <div class="p-5 border-b border-gray-200 bg-white/50 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <h3 class="font-bold text-brand-blue text-lg">Data Survey (Update Terakhir)</h3>
                     <div class="relative w-full sm:w-72">
-                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Cari nama atau aktivitas..." 
-                            class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-blue focus:outline-none text-sm bg-white">
+                        <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Cari data..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-300 focus:ring-2 focus:ring-brand-blue outline-none text-sm">
                         <i class="fa-solid fa-search absolute left-3.5 top-3 text-gray-400"></i>
                     </div>
                 </div>
-                
                 <div class="overflow-x-auto max-h-[600px]">
                     <table class="w-full text-left text-sm" id="dataTable">
                         <thead class="bg-brand-blue text-white sticky top-0 z-10">
                             <tr>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(0)">Waktu Update <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
-                                <th class="px-5 py-4 font-semibold cursor-pointer hover:bg-blue-800 transition whitespace-nowrap" onclick="sortTable(1)">Nama Pegawai <i class="fa-solid fa-sort ml-1 opacity-50"></i></th>
+                                <th class="px-5 py-4 font-semibold whitespace-nowrap">Waktu Update</th>
+                                <th class="px-5 py-4 font-semibold whitespace-nowrap">Nama Pegawai</th>
                                 <th class="px-5 py-4 font-semibold whitespace-nowrap">No WA</th>
                                 <th class="px-5 py-4 font-semibold whitespace-nowrap">Amanah</th>
                                 <th class="px-5 py-4 font-semibold min-w-[300px]">Rencana Aktivitas</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBody" class="divide-y divide-gray-100 bg-white/50">
-                            <!-- Data dimuat JS -->
-                        </tbody>
+                        <tbody id="tableBody" class="divide-y divide-gray-100 bg-white/50"></tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
 
-    <!-- ========================================== -->
     <!-- JAVASCRIPT LOGIC -->
-    <!-- ========================================== -->
     <script>
-        // URl WebApp Apps Script Anda (Wajib URL Exec)
         const API_URL = 'https://script.google.com/macros/s/AKfycbwi5E9mJl9gvC5ZsTaK59c109AgT4e7P65UOkSx4P8HyQTRuvA030I_UtFRZ2Ir-RFv/exec';
         
         let globalData = { employees: [], updates: [] };
         let tomSelectInstance = null;
         const ADMIN_PASS = "kpwi";
 
-        // 1. Inisialisasi & Progress Bar Animasi
         document.addEventListener("DOMContentLoaded", () => {
             let progress = 0;
             const bar = document.getElementById('progressBar');
             const percentTxt = document.getElementById('progressPercent');
             
-            // Animasi jalan terus sampai 90% sambil nunggu fetch
             const interval = setInterval(() => {
                 if(progress < 90) {
                     progress += Math.floor(Math.random() * 5) + 1;
@@ -304,19 +196,20 @@
                 }
             }, 150);
 
-            // Fetch Data dari Backend GAS via GET Request
-            fetch(API_URL + '?action=getData')
-                .then(response => response.json())
-                .then(data => {
+            // FIX CORS: Menggunakan POST (text/plain) untuk AMBIL DATA
+            fetch(API_URL, {
+                method: 'POST',
+                body: JSON.stringify({ action: 'getData' }),
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                clearInterval(interval);
+                if(data.status === 'success') {
                     globalData = data;
-                    clearInterval(interval);
-                    
-                    // Penuhkan progress bar
-                    bar.style.width = '100%';
-                    percentTxt.innerText = '100%';
+                    bar.style.width = '100%'; percentTxt.innerText = '100%';
                     document.getElementById('loadingText').innerText = "Siap Digunakan!";
                     
-                    // Delay dikit biat transisi mulus
                     setTimeout(() => {
                         document.getElementById('loadingOverlay').style.opacity = '0';
                         setTimeout(() => {
@@ -325,39 +218,32 @@
                             initApp();
                         }, 500);
                     }, 500);
-                })
-                .catch(error => {
-                    clearInterval(interval);
-                    document.getElementById('loadingText').innerText = "Gagal memuat data.";
-                    Swal.fire('Koneksi Error', 'Gagal terhubung ke database. Coba muat ulang halaman.', 'error');
-                });
+                } else {
+                    throw new Error(data.message || "Gagal mengambil data dari server.");
+                }
+            })
+            .catch(err => {
+                clearInterval(interval);
+                document.getElementById('loadingText').innerText = "Gagal memuat data.";
+                Swal.fire('Koneksi Error', err.toString(), 'error');
+            });
         });
 
-        // 2. Setup Aplikasi (Dropdown & Event)
         function initApp() {
             const selectEl = document.getElementById('pegawaiSelect');
-            
-            // Masukkan data master pegawai ke option
             globalData.employees.forEach(emp => {
                 const opt = document.createElement('option');
-                opt.value = emp.name;
-                opt.text = emp.name;
-                opt.dataset.amanah = emp.amanah;
+                opt.value = emp.name; opt.text = emp.name; opt.dataset.amanah = emp.amanah;
                 selectEl.appendChild(opt);
             });
 
-            // Init TomSelect (Tidak bisa ketik manual bebas, harus ada di list)
             tomSelectInstance = new TomSelect('#pegawaiSelect', {
-                create: false,
-                maxOptions: 50,
-                sortField: { field: "text", direction: "asc" },
+                create: false, maxOptions: 50, sortField: { field: "text", direction: "asc" },
                 onChange: function(value) { handleNameSelection(value); }
             });
-
             renderAdminData();
         }
 
-        // 3. Logika Tampil Dinamis & Autofill Data Terakhir
         function handleNameSelection(selectedName) {
             const formDetails = document.getElementById('formDetails');
             const list = document.getElementById('amanahList');
@@ -366,16 +252,11 @@
             const activityInput = document.getElementById('activityInput');
             const alertBox = document.getElementById('alertAutofill');
             
-            if (!selectedName) {
-                formDetails.classList.add('hidden'); // Sembunyikan form detail
-                return;
-            }
+            if (!selectedName) { formDetails.classList.add('hidden'); return; }
 
-            // Tampilkan wrapper detail
             formDetails.classList.remove('hidden');
-
-            // Set Amanah
             const employee = globalData.employees.find(e => e.name === selectedName);
+            
             if (employee && employee.amanah) {
                 const amanahArr = employee.amanah.split('\n').filter(a => a.trim() !== '');
                 list.innerHTML = amanahArr.map(item => `<li>${item}</li>`).join('');
@@ -385,50 +266,41 @@
                 hiddenInput.value = "-";
             }
 
-            // Cek Data Terakhir (Autofill Sheet Update)
             const historyData = globalData.updates.find(u => u.name === selectedName);
             if (historyData) {
                 waInput.value = historyData.wa;
                 activityInput.value = historyData.activity;
-                alertBox.classList.remove('hidden'); // Tampilkan info kalau data di-load
+                alertBox.classList.remove('hidden');
             } else {
-                waInput.value = '';
-                activityInput.value = '';
-                alertBox.classList.add('hidden');
+                waInput.value = ''; activityInput.value = ''; alertBox.classList.add('hidden');
             }
         }
 
-        // 4. Validasi Form
         function validateWA(input) {
-            let val = input.value.replace(/\D/g, ''); // Buang selain angka
-            if (val.startsWith('08')) val = '628' + val.substring(2); // Auto 628
+            let val = input.value.replace(/\D/g, ''); 
+            if (val.startsWith('08')) val = '628' + val.substring(2); 
             input.value = val;
         }
 
-        // 5. Submit Form
         function submitForm(e) {
             e.preventDefault();
-            
             const wa = document.getElementById('waInput').value;
-            if (!wa.startsWith('62')) {
-                Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Nomor WhatsApp wajib diawali 62' });
-                return;
-            }
+            if (!wa.startsWith('62')) { Swal.fire('Perhatian', 'Nomor WA wajib diawali 62', 'warning'); return; }
 
             const payload = {
+                action: 'submitData',
                 name: document.getElementById('pegawaiSelect').value,
                 wa: wa,
                 amanah: document.getElementById('amanahHidden').value,
                 activity: document.getElementById('activityInput').value
             };
 
-            // Loading Button State
             const btn = document.getElementById('btnSubmit');
             const originalText = btn.innerHTML;
             btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
             btn.disabled = true;
 
-            // POST ke GAS, gunakan fetch standard stringify dengan text/plain mencegah preflight error CORS
+            // FIX CORS: Gunakan POST (text/plain)
             fetch(API_URL, {
                 method: 'POST',
                 body: JSON.stringify(payload),
@@ -437,52 +309,35 @@
             .then(res => res.json())
             .then(res => {
                 if(res.status === 'success') {
-                    // Tampilkan Success Page
                     document.getElementById('viewForm').classList.add('hidden');
                     document.getElementById('viewSuccess').classList.remove('hidden');
                     
-                    // Update globalData.updates manual di memori agar admin update tanpa reload page
                     payload.timestamp = new Date().toLocaleString('id-ID');
                     let existingIdx = globalData.updates.findIndex(u => u.name === payload.name);
                     if (existingIdx !== -1) globalData.updates[existingIdx] = payload;
-                    else globalData.updates.unshift(payload); // add ke array depan
-                    
+                    else globalData.updates.unshift(payload);
                     renderAdminData();
-                } else {
-                    Swal.fire('Gagal Menyimpan', res.message, 'error');
-                }
+                } else { Swal.fire('Gagal Menyimpan', res.message, 'error'); }
             })
             .catch(err => Swal.fire('Error Jaringan', err.toString(), 'error'))
-            .finally(() => {
-                btn.innerHTML = originalText;
-                btn.disabled = false;
-            });
+            .finally(() => { btn.innerHTML = originalText; btn.disabled = false; });
         }
 
         function resetForm() {
             document.getElementById('surveyForm').reset();
             tomSelectInstance.clear();
             document.getElementById('formDetails').classList.add('hidden');
-            
             document.getElementById('viewSuccess').classList.add('hidden');
             document.getElementById('viewForm').classList.remove('hidden');
         }
 
-        // 6. Mode Admin & Dasbor
         function promptAdminLogin() {
             Swal.fire({
-                title: 'Akses Dasbor Pimpinan',
-                input: 'password',
-                inputPlaceholder: 'Masukkan kode akses...',
-                showCancelButton: true,
-                confirmButtonColor: '#1e3a8a',
-                confirmButtonText: 'Buka Dasbor'
+                title: 'Akses Dasbor Pimpinan', input: 'password', showCancelButton: true,
+                confirmButtonColor: '#1e3a8a', confirmButtonText: 'Buka Dasbor'
             }).then((result) => {
-                if (result.isConfirmed && result.value === ADMIN_PASS) {
-                    switchView('admin');
-                } else if (result.isConfirmed) {
-                    Swal.fire({ icon: 'error', title: 'Ditolak', text: 'Kode salah!', timer: 1500, showConfirmButton: false });
-                }
+                if (result.isConfirmed && result.value === ADMIN_PASS) switchView('admin');
+                else if (result.isConfirmed) Swal.fire({ icon: 'error', title: 'Ditolak', text: 'Kode salah!', timer: 1500, showConfirmButton: false });
             });
         }
 
@@ -490,112 +345,54 @@
             document.getElementById('viewForm').classList.add('hidden');
             document.getElementById('viewSuccess').classList.add('hidden');
             document.getElementById('viewAdmin').classList.add('hidden');
-            
-            if (view === 'admin') {
-                document.getElementById('viewAdmin').classList.remove('hidden');
-                generateAISummary(); 
-            } else {
-                document.getElementById('viewForm').classList.remove('hidden');
-            }
+            if (view === 'admin') document.getElementById('viewAdmin').classList.remove('hidden');
+            else document.getElementById('viewForm').classList.remove('hidden');
         }
 
         function renderAdminData() {
             const tbody = document.getElementById('tableBody');
             tbody.innerHTML = '';
-            
             if (globalData.updates.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-8 text-center text-gray-500 italic">Data belum tersedia.</td></tr>`;
                 return;
             }
-
             globalData.updates.forEach(sub => {
                 tbody.innerHTML += `
-                    <tr class="hover:bg-blue-50/50 transition-colors">
-                        <td class="px-5 py-3 text-gray-600 whitespace-nowrap text-xs">${sub.timestamp}</td>
-                        <td class="px-5 py-3 font-semibold text-brand-blue whitespace-nowrap">${sub.name}</td>
-                        <td class="px-5 py-3 text-gray-600 whitespace-nowrap"><a href="https://wa.me/${sub.wa}" target="_blank" class="text-green-600 hover:underline"><i class="fa-brands fa-whatsapp"></i> ${sub.wa}</a></td>
+                    <tr class="hover:bg-blue-50/50">
+                        <td class="px-5 py-3 text-gray-600 text-xs">${sub.timestamp}</td>
+                        <td class="px-5 py-3 font-semibold text-brand-blue">${sub.name}</td>
+                        <td class="px-5 py-3 text-gray-600"><a href="https://wa.me/${sub.wa}" target="_blank" class="text-green-600"><i class="fa-brands fa-whatsapp"></i> ${sub.wa}</a></td>
                         <td class="px-5 py-3 text-gray-600 text-xs">${sub.amanah}</td>
-                        <td class="px-5 py-3 text-gray-800 text-sm"><div class="leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-100">${sub.activity}</div></td>
+                        <td class="px-5 py-3 text-gray-800 text-sm"><div class="bg-gray-50 p-3 rounded-lg border border-gray-100">${sub.activity}</div></td>
                     </tr>
                 `;
             });
         }
 
-        // 7. Utilitas Admin (Cari, Sort, Ekspor, AI Summary)
         function filterTable() {
             const filter = document.getElementById("searchInput").value.toLowerCase();
             const rows = document.getElementById("tableBody").getElementsByTagName("tr");
-            for (let i = 0; i < rows.length; i++) {
-                rows[i].style.display = rows[i].textContent.toLowerCase().includes(filter) ? "" : "none";
-            }
-        }
-
-        let sortAsc = false;
-        function sortTable(colIndex) {
-            const table = document.getElementById("dataTable");
-            let rows, switching, i, x, y, shouldSwitch;
-            switching = true;
-            sortAsc = !sortAsc;
-            while (switching) {
-                switching = false;
-                rows = table.rows;
-                for (i = 1; i < (rows.length - 1); i++) {
-                    shouldSwitch = false;
-                    x = rows[i].getElementsByTagName("TD")[colIndex];
-                    y = rows[i + 1].getElementsByTagName("TD")[colIndex];
-                    if (sortAsc ? x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() : x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                        shouldSwitch = true; break;
-                    }
-                }
-                if (shouldSwitch) {
-                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-                    switching = true;
-                }
-            }
+            for (let i = 0; i < rows.length; i++) rows[i].style.display = rows[i].textContent.toLowerCase().includes(filter) ? "" : "none";
         }
 
         function exportToExcel() {
             if(globalData.updates.length === 0) return;
             const ws = XLSX.utils.json_to_sheet(globalData.updates);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "Rekap_Terbaru");
-            XLSX.writeFile(wb, `Rekap_Survey_Pegawai.xlsx`);
+            XLSX.utils.book_append_sheet(wb, ws, "Rekap");
+            XLSX.writeFile(wb, `Rekap_Survey.xlsx`);
         }
 
         function exportToPDF() {
             if(globalData.updates.length === 0) return;
             const doc = new jspdf.jsPDF('l', 'pt', 'a4');
-            doc.text("Rekapitulasi Survey Kegiatan Pegawai (Update Terakhir)", 40, 40);
+            doc.text("Rekapitulasi Survey Kegiatan", 40, 40);
             doc.autoTable({
                 head: [['Waktu', 'Nama', 'No WA', 'Amanah', 'Rencana Aktivitas']],
                 body: globalData.updates.map(s => [s.timestamp, s.name, s.wa, s.amanah, s.activity]),
-                startY: 60,
-                styles: { fontSize: 8 },
-                headStyles: { fillColor: [30, 58, 138] }, // brand-blue
-                columnStyles: { 4: { cellWidth: 250 } }
+                startY: 60, styles: { fontSize: 8 }, headStyles: { fillColor: [30, 58, 138] }, columnStyles: { 4: { cellWidth: 250 } }
             });
-            doc.save(`Rekap_Survey_Pegawai.pdf`);
-        }
-
-        function generateAISummary() {
-            const ul = document.getElementById('aiSummaryList');
-            if (globalData.updates.length === 0) {
-                ul.innerHTML = '<li class="text-gray-400">Belum ada data untuk dianalisis.</li>';
-                return;
-            }
-            // Simulasi AI Keyword Extractor
-            const allText = globalData.updates.map(s => s.activity.toLowerCase()).join(' ');
-            const keywords = ['rapat', 'evaluasi', 'laporan', 'maintenance', 'kajian', 'dakwah', 'anggaran', 'surat', 'sosialisasi'];
-            let foundTopics = keywords.map(kw => ({ topic: kw, count: (allText.match(new RegExp(kw, 'g')) || []).length })).filter(t => t.count > 0).sort((a, b) => b.count - a.count);
-
-            ul.innerHTML = '';
-            if (foundTopics.length > 0) {
-                const top = foundTopics.slice(0, 3);
-                top.forEach(t => ul.innerHTML += `<li>Mayoritas merencanakan aktivitas berkaitan dengan <strong>${t.topic}</strong>.</li>`);
-                ul.innerHTML += `<li>Total <strong>${globalData.updates.length} pegawai</strong> telah melakukan pembaruan laporan.</li>`;
-            } else {
-                ul.innerHTML = '<li>Aktivitas bersifat tugas rutin operasional dan spesifik individual.</li>';
-            }
+            doc.save(`Rekap_Survey.pdf`);
         }
     </script>
 </body>
